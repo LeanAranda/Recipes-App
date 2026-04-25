@@ -1,7 +1,9 @@
-import { IsNotEmpty, IsNumberString } from "class-validator";
+import { IsInt, IsNotEmpty, Max, Min } from "class-validator";
 
 export class UpdateRatingDto {
     @IsNotEmpty()
-    @IsNumberString()
-    rating: number;
+    @IsInt()
+    @Min(1)
+    @Max(10)
+    score: number;
 }

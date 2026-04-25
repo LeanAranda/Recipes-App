@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { RecipesService } from './recipes.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
@@ -14,7 +14,7 @@ export class RecipesController {
     }
 
     @Get(':id')
-    getRecipe(@Param('id') id: string) {
+    getRecipe(@Param('id', ParseIntPipe) id: number) {
         return this.recipesService.getRecipe(id);
     }
 
@@ -24,22 +24,22 @@ export class RecipesController {
     }
 
     @Get('user/:userId')
-    getRecipesByUser(@Param('userId') userId: string) {
+    getRecipesByUser(@Param('userId', ParseIntPipe) userId: number) {
         return this.recipesService.getRecipesByUser(userId);
     }
 
     @Post()
     createRecipe(@Body() recipeData: CreateRecipeDto) {
-        return this.recipesService.createRecipe();
+        return this.recipesService.createRecipe(recipeData);
     }
 
     @Put(':id')
-    updateRecipe(@Param('id') id: string, @Body() recipeData: UpdateRecipeDto) {
-        return this.recipesService.updateRecipe(id);
+    updateRecipe(@Param('id', ParseIntPipe) id: number, @Body() recipeData: UpdateRecipeDto) {
+        return this.recipesService.updateRecipe(id, recipeData);
     }
 
     @Delete(':id')
-    deleteRecipe(@Param('id') id: string) {
+    deleteRecipe(@Param('id', ParseIntPipe) id: number) {
         return this.recipesService.deleteRecipe(id);
     }
 }

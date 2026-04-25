@@ -1,13 +1,16 @@
-/* 
----------------- schema ----------------
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output          = "../src/generated/prisma"
+  moduleFormat  = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -24,11 +27,13 @@ model Recipe {
   id          Int       @id @default(autoincrement())
   title       String
   description String
-  ingredients String
+  ingredients String[]
   userId      Int
   user        User      @relation(fields: [userId], references: [id])
   ratings     Rating[]
   imageUrl    String?
+  /* id publico para compartir */
+  publicId    String  @default(uuid()) @unique
 }
 
 model Rating {
@@ -38,6 +43,6 @@ model Rating {
   recipeId    Int
   user        User      @relation(fields: [userId], references: [id])
   recipe      Recipe    @relation(fields: [recipeId], references: [id])
-}
 
-*/
+  @@unique([userId, recipeId]) // un solo rating por usuario y receta
+}

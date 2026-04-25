@@ -1,33 +1,81 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma.service';
+import { CreateRecipeDto } from './dto/create-recipe.dto';
+import { UpdateRecipeDto } from './dto/update-recipe.dto';
 
 @Injectable()
 export class RecipesService {
 
+    constructor(private prisma: PrismaService) {}
+
     getAllRecipes() {
-        return 'Obteniendo todas las recetas';
+        return this.prisma.recipe.findMany();
     }
 
-    getRecipe(id: string) {
-        return 'Obteniendo receta';
+    async getRecipe(id: number) {
+        const recipe = await this.prisma.recipe.findUnique({
+            where: { id }
+        });
+        if (!recipe) {
+            throw new HttpException('Recipe not found', HttpStatus.NOT_FOUND);
+        }
+        return recipe;
     }
 
-    getPublicRecipe(id: string) {
-        return 'Obteniendo receta pública';
+    async getPublicRecipe(publicId: string) {
+        const recipe = await this.prisma.recipe.findUnique({
+            where: { publicId }
+        });
+        if (!recipe) {
+            throw new HttpException('Recipe not found', HttpStatus.NOT_FOUND);
+        }
+        //TODO link publico
+        return recipe;
     }
 
-    getRecipesByUser(userId: string) {
-        return 'Obteniendo recetas por usuario';
+    getRecipesByUser(userId: number) {
+        return this.prisma.recipe.findMany({
+            where: { userId }
+        });
     }
 
-    createRecipe() {
-        return 'Creando receta';
+    createRecipe(recipeData: CreateRecipeDto) {
+        const user = this.prisma.user.findUnique({
+            where: { id: recipeData.userId }
+        });
+        if (!user) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+        return this.prisma.recipe.create({
+            data: {
+                ...recipeData,
+                imageUrl: recipeData.imageUrl ?? 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg'
+            }
+        });
     }
 
-    updateRecipe(id: string) {
-        return 'Actualizando receta';
+    async updateRecipe(id: number, recipeData: Partial<UpdateRecipeDto>) {
+        const recipe = await this.prisma.recipe.findUnique({
+            where: { id }
+        });
+        if (!recipe) {
+            throw new HttpException('Recipe not found', HttpStatus.NOT_FOUND);
+        }
+        return this.prisma.recipe.update({
+            where: { id },
+            data: recipeData
+        });
     }
 
-    deleteRecipe(id: string) {
-        return 'Eliminando receta';
+    async deleteRecipe(id: number) {
+        const recipe = await this.prisma.recipe.findUnique({
+            where: { id }
+        });
+        if (!recipe) {
+            throw new HttpException('Recipe not found', HttpStatus.NOT_FOUND);
+        }
+        return this.prisma.recipe.delete({
+            where: { id }
+        });
     }
 }

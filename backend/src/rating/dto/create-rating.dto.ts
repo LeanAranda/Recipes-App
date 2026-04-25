@@ -1,15 +1,17 @@
-import { IsNotEmpty, IsNumberString } from "class-validator";
+import { IsInt, IsNotEmpty, Max, Min } from "class-validator";
 
 export class CreateRatingDto {
     @IsNotEmpty()
-    @IsNumberString()
-    userId: string;
+    @IsInt()
+    userId: number;
 
     @IsNotEmpty()
-    @IsNumberString()
-    recipeId: string;
+    @IsInt()
+    recipeId: number;
     
     @IsNotEmpty()
-    @IsNumberString()
-    rating: number;
+    @IsInt()
+    @Min(1)
+    @Max(10)
+    score: number;
 }

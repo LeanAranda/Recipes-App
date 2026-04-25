@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumberString, IsString, MinLength} from "class-validator";
+import { ArrayNotEmpty, IsArray, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl, MinLength} from "class-validator";
 
 export class CreateRecipeDto {
     @IsNotEmpty()
@@ -10,12 +10,16 @@ export class CreateRecipeDto {
     @IsString()
     description: string;
 
-    @IsNotEmpty()
+    @IsArray()
+    @ArrayNotEmpty()
+    @IsString({ each: true })
     ingredients: string[];
 
-    imageUrl: string;
+    @IsOptional()
+    @IsUrl()
+    imageUrl?: string;
 
     @IsNotEmpty()
-    @IsNumberString()
-    userId: string;
+    @IsInt()
+    userId: number;
 }

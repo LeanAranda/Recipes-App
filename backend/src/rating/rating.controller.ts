@@ -1,5 +1,7 @@
-import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { RatingService } from './rating.service';
+import { CreateRatingDto } from './dto/create-rating.dto';
+import { UpdateRatingDto } from './dto/update-rating.dto';
 
 @Controller('rating')
 export class RatingController {
@@ -12,28 +14,28 @@ export class RatingController {
     }
 
     @Get(':id')
-    getRating(@Param('id') id: string) {
+    getRating(@Param('id', ParseIntPipe) id: number) {
         return this.ratingService.getRating(id);
     }
 
     @Get('recipe/:recipeId')
-    getRatingsByRecipe(@Param('recipeId') recipeId: string) {
+    getRatingsByRecipe(@Param('recipeId', ParseIntPipe) recipeId: number) {
         return this.ratingService.getRatingsByRecipe(recipeId);
     }
 
     @Post()
-    createRating() {
-        return this.ratingService.createRating();
+    createRating(@Body() ratingData: CreateRatingDto) {
+        return this.ratingService.createRating(ratingData);
     }
 
     @Put(':id')
-    updateRating(@Param('id') id: string) {
-        return this.ratingService.updateRating(id);
+    updateRating(@Param('id', ParseIntPipe) id: number , @Body() ratingData: UpdateRatingDto) {
+        return this.ratingService.updateRating(id, ratingData);
     }
 
 
     @Delete(':id')
-    deleteRating(@Param('id') id: string) {
+    deleteRating(@Param('id', ParseIntPipe) id: number) {
         return this.ratingService.deleteRating(id);
     }
 
