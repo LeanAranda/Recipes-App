@@ -22,7 +22,13 @@ export class RatingService {
         return rating;
     }
 
-    getRatingsByRecipe(recipeId: number) {
+    async getRatingsByRecipe(recipeId: number) {
+        const recipe = this.prismaService.recipe.findUnique({
+            where: { id: recipeId }
+        });
+        if (!recipe) {
+            throw new HttpException(`Recipe not found`, HttpStatus.NOT_FOUND);
+        }
         return this.prismaService.rating.findMany({
             where: { recipeId }
         });

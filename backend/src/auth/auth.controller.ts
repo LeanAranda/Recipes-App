@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import type { Request, Response } from 'express';
 import { ValidateuserPipe } from './pipes/validateuser/validateuser.pipe';
 import { AuthGuard } from './guards/auth/auth.guard';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller({})
 export class AuthController {
@@ -10,6 +11,9 @@ export class AuthController {
     constructor(private authService: AuthService) {}
 
     @Get()
+    @ApiOperation({ summary: 'Get Hello World' })
+    @ApiResponse({ status: 200, description: 'Returns Hello World' })
+    
     getHello(){
         return "hello world";
     }
