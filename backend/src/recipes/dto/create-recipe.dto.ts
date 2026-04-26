@@ -24,8 +24,10 @@ export class CreateRecipeDto {
     @IsUrl()
     imageUrl?: string;
 
+    /*
     @ApiProperty({ description: 'ID del usuario que crea la receta', example: 1 })
     @IsNotEmpty()
     @IsInt()
     userId: number;
+    */
 }

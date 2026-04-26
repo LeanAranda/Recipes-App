@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsArray, IsOptional, IsString, IsUrl } from "class-validator";
+import { IsArray, IsBoolean, IsOptional, IsString, IsUrl } from "class-validator";
 
 export class UpdateRecipeDto {
     @ApiPropertyOptional({ description: 'Título de la receta', example: 'Panqueques' })
@@ -22,4 +22,9 @@ export class UpdateRecipeDto {
     @IsOptional()
     @IsUrl()
     imageUrl?: string;
+
+    @ApiPropertyOptional({ description: 'Indica si la receta está eliminada', example: false })
+    @IsOptional()
+    @IsBoolean()
+    deleted?: boolean;
 }

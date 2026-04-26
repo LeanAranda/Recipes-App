@@ -17,10 +17,10 @@ window.onload = function() {
           "parameters": [],
           "responses": {
             "200": {
-              "description": "List of users"
+              "description": "Lista de usuarios"
             }
           },
-          "summary": "Get all users",
+          "summary": "Obtener todos los usuarios",
           "tags": [
             "Users"
           ]
@@ -40,13 +40,13 @@ window.onload = function() {
           },
           "responses": {
             "201": {
-              "description": "User created"
+              "description": "Usuario creado"
             },
             "400": {
-              "description": "Invalid input"
+              "description": "Datos inválidos"
             }
           },
-          "summary": "Create a new user",
+          "summary": "Crear un nuevo usuario",
           "tags": [
             "Users"
           ]
@@ -67,13 +67,13 @@ window.onload = function() {
           ],
           "responses": {
             "200": {
-              "description": "User found"
+              "description": "Usuario encontrado"
             },
             "404": {
-              "description": "User not found"
+              "description": "Usuario no encontrado"
             }
           },
-          "summary": "Get user by ID",
+          "summary": "Obtener un usuario por ID",
           "tags": [
             "Users"
           ]
@@ -102,38 +102,13 @@ window.onload = function() {
           },
           "responses": {
             "200": {
-              "description": "User updated"
+              "description": "Usuario actualizado"
             },
             "404": {
-              "description": "User not found"
+              "description": "Usuario no encontrado"
             }
           },
-          "summary": "Update a user",
-          "tags": [
-            "Users"
-          ]
-        },
-        "delete": {
-          "operationId": "UsersController_deleteUser",
-          "parameters": [
-            {
-              "name": "id",
-              "required": true,
-              "in": "path",
-              "schema": {
-                "type": "number"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "User deleted"
-            },
-            "404": {
-              "description": "User not found"
-            }
-          },
-          "summary": "Delete a user",
+          "summary": "Actualizar un usuario",
           "tags": [
             "Users"
           ]
@@ -148,7 +123,63 @@ window.onload = function() {
               "description": "Returns Hello World"
             }
           },
-          "summary": "Get Hello World",
+          "summary": "Test endpoint",
+          "tags": [
+            "Auth"
+          ]
+        }
+      },
+      "/register": {
+        "post": {
+          "operationId": "AuthController_register",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUserDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "User registered successfully"
+            },
+            "400": {
+              "description": "Invalid input"
+            }
+          },
+          "summary": "Registra un nuevo usuario",
+          "tags": [
+            "Auth"
+          ]
+        }
+      },
+      "/login": {
+        "post": {
+          "operationId": "AuthController_login",
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginUserDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "User logged in successfully"
+            },
+            "401": {
+              "description": "Invalid credentials"
+            }
+          },
+          "summary": "Inicia sesión como usuario",
           "tags": [
             "Auth"
           ]
@@ -156,14 +187,14 @@ window.onload = function() {
       },
       "/recipes": {
         "get": {
-          "operationId": "RecipesController_getAllRecipes",
+          "operationId": "RecipesController_getAllActiveRecipes",
           "parameters": [],
           "responses": {
             "200": {
-              "description": "List of recipes"
+              "description": "Lista de recetas activas"
             }
           },
-          "summary": "Get all recipes",
+          "summary": "Obtener todas las recetas activas",
           "tags": [
             "Recipes"
           ]
@@ -183,13 +214,46 @@ window.onload = function() {
           },
           "responses": {
             "201": {
-              "description": "Recipe created"
+              "description": "Receta creada"
             },
             "400": {
-              "description": "Invalid input"
+              "description": "Datos inválidos"
             }
           },
-          "summary": "Create a new recipe",
+          "summary": "Crear una nueva receta",
+          "tags": [
+            "Recipes"
+          ]
+        }
+      },
+      "/recipes/all": {
+        "get": {
+          "operationId": "RecipesController_getAllRecipes",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "Lista de recetas"
+            }
+          },
+          "summary": "Obtener todas las recetas",
+          "tags": [
+            "Recipes"
+          ]
+        }
+      },
+      "/recipes/my-recipes": {
+        "get": {
+          "operationId": "RecipesController_getAllMyRecipes",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "Lista de mis recetas"
+            },
+            "404": {
+              "description": "Usuario no encontrado"
+            }
+          },
+          "summary": "Obtener todas las recetas del usuario",
           "tags": [
             "Recipes"
           ]
@@ -210,13 +274,13 @@ window.onload = function() {
           ],
           "responses": {
             "200": {
-              "description": "The recipe"
+              "description": "La receta con el ID especificado"
             },
             "404": {
-              "description": "Recipe not found"
+              "description": "Receta no encontrada"
             }
           },
-          "summary": "Get a recipe by ID",
+          "summary": "Obtener una receta por ID",
           "tags": [
             "Recipes"
           ]
@@ -245,22 +309,25 @@ window.onload = function() {
           },
           "responses": {
             "200": {
-              "description": "Recipe updated"
+              "description": "Receta actualizada"
             },
             "400": {
-              "description": "Invalid input"
+              "description": "Datos inválidos"
+            },
+            "401": {
+              "description": "No autorizado"
             },
             "404": {
-              "description": "Recipe not found"
+              "description": "Receta no encontrada"
             }
           },
-          "summary": "Update a recipe",
+          "summary": "Actualizar una receta",
           "tags": [
             "Recipes"
           ]
         },
         "delete": {
-          "operationId": "RecipesController_deleteRecipe",
+          "operationId": "RecipesController_softDeleteRecipe",
           "parameters": [
             {
               "name": "id",
@@ -273,13 +340,16 @@ window.onload = function() {
           ],
           "responses": {
             "200": {
-              "description": "Recipe deleted"
+              "description": "Receta eliminada (soft delete)"
+            },
+            "401": {
+              "description": "No autorizado"
             },
             "404": {
-              "description": "Recipe not found"
+              "description": "Receta no encontrada"
             }
           },
-          "summary": "Delete a recipe",
+          "summary": "Eliminar una receta (soft delete)",
           "tags": [
             "Recipes"
           ]
@@ -300,13 +370,13 @@ window.onload = function() {
           ],
           "responses": {
             "200": {
-              "description": "The public recipe"
+              "description": "La receta pública"
             },
             "404": {
-              "description": "Recipe not found"
+              "description": "Receta no encontrada"
             }
           },
-          "summary": "Get a public recipe by its public ID",
+          "summary": "Obtener una receta pública por su ID público",
           "tags": [
             "Recipes"
           ]
@@ -327,13 +397,13 @@ window.onload = function() {
           ],
           "responses": {
             "200": {
-              "description": "List of recipes"
+              "description": "Lista de recetas"
             },
             "404": {
-              "description": "User not found"
+              "description": "Usuario no encontrado"
             }
           },
-          "summary": "Get recipes by user ID",
+          "summary": "Obtener recetas por ID de usuario",
           "tags": [
             "Recipes"
           ]
@@ -345,10 +415,10 @@ window.onload = function() {
           "parameters": [],
           "responses": {
             "200": {
-              "description": "List of ratings"
+              "description": "Lista de calificaciones"
             }
           },
-          "summary": "Get all ratings",
+          "summary": "Obtener todas las calificaciones",
           "tags": [
             "Rating"
           ]
@@ -368,13 +438,16 @@ window.onload = function() {
           },
           "responses": {
             "201": {
-              "description": "Rating created"
+              "description": "Calificación creada"
             },
             "400": {
-              "description": "Invalid input"
+              "description": "Datos inválidos"
+            },
+            "404": {
+              "description": "Usuario o Receta no encontrados"
             }
           },
-          "summary": "Create a new rating",
+          "summary": "Crear una nueva calificación",
           "tags": [
             "Rating"
           ]
@@ -395,13 +468,13 @@ window.onload = function() {
           ],
           "responses": {
             "200": {
-              "description": "The rating with the specified ID"
+              "description": "La calificación con el ID especificado"
             },
             "404": {
-              "description": "Rating not found"
+              "description": "Calificación no encontrada"
             }
           },
-          "summary": "Get a rating by ID",
+          "summary": "Obtener una calificación por ID",
           "tags": [
             "Rating"
           ]
@@ -430,16 +503,19 @@ window.onload = function() {
           },
           "responses": {
             "200": {
-              "description": "Rating updated"
+              "description": "Calificación actualizada"
             },
             "400": {
-              "description": "Invalid input"
+              "description": "Datos inválidos"
+            },
+            "403": {
+              "description": "No autorizado para actualizar esta calificación"
             },
             "404": {
-              "description": "Rating not found"
+              "description": "Calificación no encontrada"
             }
           },
-          "summary": "Update a rating",
+          "summary": "Actualizar una calificación",
           "tags": [
             "Rating"
           ]
@@ -458,13 +534,16 @@ window.onload = function() {
           ],
           "responses": {
             "200": {
-              "description": "Rating deleted"
+              "description": "Calificación eliminada"
+            },
+            "403": {
+              "description": "No autorizado para eliminar esta calificación"
             },
             "404": {
-              "description": "Rating not found"
+              "description": "Calificación no encontrada"
             }
           },
-          "summary": "Delete a rating",
+          "summary": "Eliminar una calificación",
           "tags": [
             "Rating"
           ]
@@ -485,13 +564,13 @@ window.onload = function() {
           ],
           "responses": {
             "200": {
-              "description": "List of ratings for the specified recipe"
+              "description": "Lista de calificaciones para la receta especificada"
             },
             "404": {
-              "description": "Recipe not found"
+              "description": "Receta no encontrada"
             }
           },
-          "summary": "Get ratings for a specific recipe",
+          "summary": "Obtener calificaciones para una receta específica",
           "tags": [
             "Rating"
           ]
@@ -564,6 +643,25 @@ window.onload = function() {
             }
           }
         },
+        "LoginUserDto": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "example": "user@example.com",
+              "description": "Email del usuario"
+            },
+            "password": {
+              "type": "string",
+              "example": "password123",
+              "description": "Contraseña del usuario"
+            }
+          },
+          "required": [
+            "email",
+            "password"
+          ]
+        },
         "CreateRecipeDto": {
           "type": "object",
           "properties": {
@@ -593,19 +691,13 @@ window.onload = function() {
               "type": "string",
               "description": "URL de la imagen de la receta",
               "example": "https://example.com/panqueques.jpg"
-            },
-            "userId": {
-              "type": "number",
-              "description": "ID del usuario que crea la receta",
-              "example": 1
             }
           },
           "required": [
             "title",
             "description",
             "ingredients",
-            "imageUrl",
-            "userId"
+            "imageUrl"
           ]
         },
         "UpdateRecipeDto": {
@@ -637,17 +729,17 @@ window.onload = function() {
               "type": "string",
               "description": "URL de la imagen de la receta",
               "example": "https://example.com/panqueques.jpg"
+            },
+            "deleted": {
+              "type": "boolean",
+              "description": "Indica si la receta está eliminada",
+              "example": false
             }
           }
         },
         "CreateRatingDto": {
           "type": "object",
           "properties": {
-            "userId": {
-              "type": "number",
-              "description": "ID del usuario que hace la valoración",
-              "example": 1
-            },
             "recipeId": {
               "type": "number",
               "description": "ID de la receta que se valora",
@@ -660,7 +752,6 @@ window.onload = function() {
             }
           },
           "required": [
-            "userId",
             "recipeId",
             "score"
           ]

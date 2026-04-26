@@ -1,64 +1,43 @@
-import { Controller, Get, HttpCode, Param, ParseBoolPipe, ParseIntPipe, Query, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import type { Request, Response } from 'express';
-import { ValidateuserPipe } from './pipes/validateuser/validateuser.pipe';
-import { AuthGuard } from './guards/auth/auth.guard';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { UsersService } from 'src/users/users.service';
+import { Public } from 'src/constants/metadata';
 
 @Controller({})
 export class AuthController {
 
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService, private usersService: UsersService) {}
 
     @Get()
-    @ApiOperation({ summary: 'Get Hello World' })
+    @ApiOperation({ summary: 'Test endpoint' })
     @ApiResponse({ status: 200, description: 'Returns Hello World' })
-    
-    getHello(){
-        return "hello world";
+    @Public()
+
+    getHello(@Request() req) {
+        return req.user ? `Hello ${req.user.email}` : 'Hello World';
     }
 
-    /* test functions ---------------------------------------
-    
-    // express response
-    @Get()
-    index(@Req() req: Request, @Res() res: Response) {
-        res.status(200).json({
-            message: 'Hello World'
-        });
+    @Post('register')
+    @ApiOperation({ summary: 'Registra un nuevo usuario' })
+    @ApiResponse({ status: 201, description: 'User registered successfully' })
+    @ApiResponse({ status: 400, description: 'Invalid input' })
+    @Public()
+
+    register(@Body() userData: CreateUserDto){
+        return this.authService.register(userData);
     }
 
-    // http code
-    @Get('notfound')
-    @HttpCode(404)
-    notFound(){
-        return 'Not Found';
-    }
+    @Post('login')
+    @ApiOperation({ summary: 'Inicia sesión como usuario' })
+    @ApiResponse({ status: 200, description: 'User logged in successfully' })
+    @ApiResponse({ status: 401, description: 'Invalid credentials' })
+    @Public()
 
-    @Get('error')
-    @HttpCode(500)
-    error(){
-        return 'Error';
+    async login(@Body() userData: LoginUserDto) {
+        const user = await this.usersService.validateUser(userData.email, userData.password);
+        return this.authService.login(user);
     }
-
-    // parse int pipe
-    @Get('test/:num')
-    test(@Param('num', ParseIntPipe) num: number){
-        return num + 100;
-    }
-
-    // parse boolean pipe
-    @Get('test2/:boolean')
-    test2(@Param('boolean', ParseBoolPipe) boolean: boolean){
-        return boolean;
-    }
-
-    // custom pipe
-    // guard
-    @Get('greet')
-    @UseGuards(AuthGuard)
-    greet(@Query(ValidateuserPipe) query: { name: string, age: number }){
-        return `Hello ${query.name}, you are ${query.age} years old`;
-    }
-    */
 }

@@ -38,6 +38,7 @@ model Recipe {
   imageUrl    String?
   /* id publico para compartir */
   publicId    String  @default(uuid()) @unique
+  deleted     Boolean   @default(false)
 }
 
 model Rating {

@@ -2,11 +2,12 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateRatingDto } from './dto/create-rating.dto';
 import { UpdateRatingDto } from './dto/update-rating.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class RatingService {
 
-    constructor(private prismaService: PrismaService) {}
+    constructor(private prismaService: PrismaService, private userService: UsersService) {}
 
     getAllRatings() {
         return this.prismaService.rating.findMany();
@@ -23,7 +24,7 @@ export class RatingService {
     }
 
     async getRatingsByRecipe(recipeId: number) {
-        const recipe = this.prismaService.recipe.findUnique({
+        const recipe = await this.prismaService.recipe.findUnique({
             where: { id: recipeId }
         });
         if (!recipe) {
@@ -34,11 +35,18 @@ export class RatingService {
         });
     }
 
-    async createRating(ratingData: CreateRatingDto) {
+    async createRating(ratingData: CreateRatingDto, email: string) {
+        const user = await this.userService.getUserByEmail(email);
+        const recipe = await this.prismaService.recipe.findUnique({
+            where: { id: ratingData.recipeId }
+        });
+        if (!user || !recipe) {
+            throw new HttpException(`User or Recipe not found`, HttpStatus.NOT_FOUND);
+        }
         const rating = await this.prismaService.rating.findUnique({
             where: {
                 userId_recipeId: {
-                    userId: ratingData.userId,
+                    userId: user.id,
                     recipeId: ratingData.recipeId
                 }
             }
@@ -46,29 +54,25 @@ export class RatingService {
         if (rating) {
             throw new HttpException(`You have already rated this recipe`, HttpStatus.BAD_REQUEST);
         }
-        
-        const user = await this.prismaService.user.findUnique({
-            where: { id: ratingData.userId }
-        });
-        const recipe = await this.prismaService.recipe.findUnique({
-            where: { id: ratingData.recipeId }
-        });
-
-        if (!user || !recipe) {
-            throw new HttpException(`User or Recipe not found`, HttpStatus.NOT_FOUND);
-        }
-
         return this.prismaService.rating.create({
-            data: ratingData
+            data: {
+                userId: user.id,
+                recipeId: ratingData.recipeId,
+                score: ratingData.score
+            }
         });
     }
 
-    async updateRating(id: number, ratingData: UpdateRatingDto) {
+    async updateRating(id: number, ratingData: UpdateRatingDto, email: string) {
+        const user = await this.userService.getUserByEmail(email);
         const rating = await this.prismaService.rating.findUnique({
             where: { id }
         });
-        if (!rating) {
+        if (!rating || !user) {
             throw new HttpException(`Rating not found`, HttpStatus.NOT_FOUND);
+        }
+        if (rating.userId !== user.id) {
+            throw new HttpException(`You can only update your own ratings`, HttpStatus.FORBIDDEN);
         }
         return this.prismaService.rating.update({
             where: { id },
@@ -76,12 +80,16 @@ export class RatingService {
         });
     }
 
-    async deleteRating(id: number) {
+    async deleteRating(id: number, email: string) {
+        const user = await this.userService.getUserByEmail(email);
         const rating = await this.prismaService.rating.findUnique({
             where: { id }
         });
-        if (!rating) {
-            throw new HttpException(`Rating not found`, HttpStatus.NOT_FOUND);
+        if (!rating || !user) {
+            throw new HttpException(`Rating or user not found`, HttpStatus.NOT_FOUND);
+        }
+        if (rating.userId !== user.id) {
+            throw new HttpException(`You can only delete your own ratings`, HttpStatus.FORBIDDEN);
         }
         return this.prismaService.rating.delete({
             where: { id }
