@@ -63,11 +63,11 @@ export class UsersService {
     async validateUser(email: string, password: string) {
         const user = await this.getUserByEmail(email);
         if (!user) {
-            throw new HttpException(`Invalid emailll or password`, HttpStatus.UNAUTHORIZED);
+            throw new HttpException(`Invalid email or password`, HttpStatus.UNAUTHORIZED);
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            throw new HttpException('Invalid email or passworddd', HttpStatus.UNAUTHORIZED);
+            throw new HttpException('Invalid email or password', HttpStatus.UNAUTHORIZED);
         }
         return user;
     }

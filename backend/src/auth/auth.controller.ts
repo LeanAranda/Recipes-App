@@ -16,8 +16,8 @@ export class AuthController {
     @ApiResponse({ status: 200, description: 'Returns Hello World' })
     @Public()
 
-    getHello(@Request() req) {
-        return req.user ? `Hello ${req.user.email}` : 'Hello World';
+    getHello() {
+        return `Hello World`;
     }
 
     @Post('register')
