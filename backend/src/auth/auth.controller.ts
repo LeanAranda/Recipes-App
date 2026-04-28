@@ -17,7 +17,7 @@ export class AuthController {
     @Public()
 
     getHello() {
-        return `Hello World`;
+        return `Recipes API is running!`;
     }
 
     @Post('register')
