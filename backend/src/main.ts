@@ -18,13 +18,12 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
   
-  /*
   app.enableCors({
-    origin: 'https://frontend',
+    //origin: 'https://frontend',
+    origin: 'https://mynotes--frontend--z6wxwfqcq9zw.code.run',
   });
-  */
 
-  app.enableCors();
+  //app.enableCors();
 
   await app.listen(process.env.PORT ?? 4000);
 }
