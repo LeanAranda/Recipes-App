@@ -4,8 +4,8 @@ services:
     env: node
     plan: free
     rootDir: backend
-    buildCommand: "cd backend && npm install && npx prisma generate && npm run build && npx prisma migrate deploy"
-    startCommand: "cd backend && npm run start:prod"
+    buildCommand: "npm install && npx prisma generate && npm run build && npx prisma migrate deploy"
+    startCommand: "npm run start:prod"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
