@@ -1,26 +1,94 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* GLOBAL STYLES */
+
+body {
+    background-image: url('/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+     background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.submit-button{
+    background-color: rgb(165, 108, 52);
+    cursor: pointer;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.submit-button:hover {
+    background-color: rgb(193, 154, 107);
+}
+
+a:hover {
+    color: rgb(165, 108, 52);
+}
+
+/* LOGIN PAGE */
+
+.login-container {
+    background-color: rgb(255, 255, 255);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-link{
+    color: rgb(165, 108, 52);
+}
+
+.h1-login {
+    color: rgb(0, 0, 0);
+    font-size: 2rem;
+}
+
+/* RECIPE PAGE */
+
+.recipes-container {
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.recipe-card {
+    background-color: rgb(255, 255, 255);
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.description-overlay {
+    background-color: rgb(165, 108, 52);
+    color:rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ANIMATIONS */
+@keyframes slideBg {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 0 0;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.animate-slide {
+  background-size: 200% 100%;
+  animation: slideBg 0.6s ease-out forwards;
 }
