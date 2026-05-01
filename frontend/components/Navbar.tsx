@@ -25,7 +25,7 @@ export default function Navbar() {
         </Link>
         <button
           onClick={handleLogout}
-          className="hover:text-yellow-600 text-left sm:text-center"
+          className="hover:text-yellow-600 text-left sm:text-center logout"
         >
           Cerrar sesión
         </button>

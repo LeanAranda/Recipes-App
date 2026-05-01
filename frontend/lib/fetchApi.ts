@@ -14,7 +14,14 @@ export async function fetchApi(
   });
 
   if (!res.ok) {
-    throw new Error(`Error ${res.status}: ${res.statusText}`);
+    let errorMessage = `Error: ${res.status}`;
+    try {
+      const errorData = await res.json();
+      errorMessage = errorData.message || errorMessage;
+    } catch {
+      // si no hay JSON, deja el status
+    }
+    throw new Error(errorMessage);
   }
 
   return res.json();

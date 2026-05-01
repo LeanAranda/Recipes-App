@@ -1,8 +1,8 @@
 export default function Footer() {
   return (
     <footer className="w-full bg-white text-black text-center py-4 mt-auto">
-      <p className="text-sm">
-        © Lean Aranda {new Date().getFullYear()} RecipesApp.
+      <p className="text-md">
+        © Lean Aranda 2026 | RecipesApp. 
       </p>
       <div className="mt-2 space-x-4">
         <a
