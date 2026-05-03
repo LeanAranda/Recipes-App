@@ -7,7 +7,7 @@ import { UsersService } from 'src/users/users.service';
 @Injectable()
 export class RatingService {
 
-    constructor(private prismaService: PrismaService, private userService: UsersService) {}
+    constructor(private prismaService: PrismaService, private userService: UsersService) { }
 
     getAllRatings() {
         return this.prismaService.rating.findMany();
@@ -31,7 +31,15 @@ export class RatingService {
             throw new HttpException(`Recipe not found`, HttpStatus.NOT_FOUND);
         }
         return this.prismaService.rating.findMany({
-            where: { recipeId }
+            where: { recipeId },
+            include: {
+                user: {
+                    select: {
+                        firstName: true,
+                        lastName: true,
+                    },
+                },
+            },
         });
     }
 

@@ -17,10 +17,15 @@ async function bootstrap() {
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
-  
+
   app.enableCors({
     //origin: 'https://frontend',
-    origin: 'https://mynotes--frontend--z6wxwfqcq9zw.code.run',
+    origin: {
+      'https://mynotes--frontend--z6wxwfqcq9zw.code.run': true,
+      'http://localhost:3000': true,
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
   });
 
   //app.enableCors();
