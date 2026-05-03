@@ -5,13 +5,29 @@ import { useEffect, useState } from "react";
 import { fetchApi } from "@/lib/fetchApi";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SubmitRating from "@/components/rating/SubmitRating";
 import type { RecipeData } from "@/types/recipe-data";
+import type { RatingData } from "@/types/rating-data";
+import Rating from "@/components/rating/Rating";
 import toast from "react-hot-toast";
+import { getUserIdFromToken } from "@/lib/getUserIdFromToken";
 
 export default function RecipePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
     const [loading, setLoading] = useState(true);
     const [recipeData, setRecipeData] = useState<RecipeData | null>(null);
+    const [ratings, setRatings] = useState<RatingData[]>([]);
+    const userId = getUserIdFromToken();
+    const myRating = ratings.find(r => r.userId === userId);
+
+    async function loadRatings() {
+        try {
+            const ratings = await fetchApi(`/rating/recipe/${id}`);
+            setRatings(ratings);
+        } catch (error) {
+            console.error("Error fetching ratings:", error);
+        }
+    }
 
     useEffect(() => {
         async function loadRecipe() {
@@ -24,7 +40,9 @@ export default function RecipePage({ params }: { params: Promise<{ id: string }>
                 setLoading(false);
             }
         }
+
         loadRecipe();
+        loadRatings();
     }, [id]);
 
     if (loading) return <div className="p-6 text-center">Cargando receta...</div>;
@@ -38,7 +56,7 @@ export default function RecipePage({ params }: { params: Promise<{ id: string }>
                     <h1 className="text-4xl font-bold mb-4 text-gray-900 recipe-detail-title">
                         {recipeData.title}
                     </h1>
-                    <p className="text-lg text-gray-600 mb-4">
+                    <p className="text-lg text-gray-600 mb-4 bg-gray-100 p-2 rounded recipe-detail-author">
                         Autor: {recipeData.author}
                     </p>
                     <div className="flex mb-6 recipe-detail-section">
@@ -71,15 +89,20 @@ export default function RecipePage({ params }: { params: Promise<{ id: string }>
                             );
                             toast.success("Link copiado al portapapeles");
                         }}
-                        className="inline-block bg-white text-black font-semibold px-4 py-2 rounded mb-4 hover:bg-gray-200 transition-colors"
+                        className="text-white px-4 py-2 rounded submit-button recipe-detail-share-button mb-6"
                     >
-                        Compartir la receta mediante un link público
+                        Compartir esta receta mediante un link público
                     </button>
                     <div className="recipe-detail-ratings">
-                        {/*
-                        [TODO SUBMIT RATINGS COMPONENT]
-                        [TODO RATINGS COMPONENT]
-                        */}
+                        <h2 className="text-xl font-bold">Tu calificación</h2>
+                        <SubmitRating
+                            recipeId={recipeData.id}
+                            RatingData={myRating}
+                            onRatingSaved={loadRatings}
+                        />
+                        {ratings.length > 0 && (
+                            <Rating ratings={ratings} />
+                        )}
                     </div>
                 </div>
             </div>

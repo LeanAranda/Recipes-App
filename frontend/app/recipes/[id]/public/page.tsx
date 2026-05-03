@@ -37,7 +37,7 @@ export default function PublicRecipePage({ params }: { params: Promise<{ id: str
                     <h1 className="text-4xl font-bold mb-4 text-gray-900 recipe-detail-title">
                         {recipeData.title}
                     </h1>
-                    <p className="text-lg text-gray-600 mb-4">
+                    <p className="text-lg text-gray-600 mb-4 bg-gray-100 p-2 rounded recipe-detail-author">
                         Autor: {recipeData.author}
                     </p>
                     <div className="flex mb-6 recipe-detail-section">
