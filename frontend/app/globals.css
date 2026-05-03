@@ -63,6 +63,8 @@ textarea {
     font-size: 2rem;
 }
 
+/* RESPONSIVE */
+
 @media (max-width: 768px) {
 
     .mobile-bg {
@@ -122,6 +124,10 @@ textarea {
     justify-content: center;
 }
 
+.description-overlay p{
+    overflow-y: auto;
+}
+
 /* ANIMATIONS */
 @keyframes slideBg {
     0% {
@@ -136,4 +142,151 @@ textarea {
 .animate-slide {
     background-size: 200% 100%;
     animation: slideBg 0.6s ease-out forwards;
+}
+
+/* RECIPE DETAIL PAGE */
+
+.recipe-detail-container{
+    align-items: center;
+    justify-content: center;
+    margin: 2rem auto;
+}
+
+.recipe-detail{
+    align-items: center;
+}
+
+.recipe-detail-title{
+    text-decoration: underline;
+    text-decoration-color: rgb(165, 108, 52);
+}
+
+.recipe-detail-section{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.recipe-detail-img-container{
+    width: 65%;
+}
+
+.recipe-detail-description{
+    border: 3px solid rgb(165, 108, 52);
+    border-radius: 0.5rem;
+    overflow-y: auto;
+}
+
+.recipe-detail-description h2{
+    background-color: rgb(165, 108, 52);
+    color: rgb(255, 255, 255);
+    width: 100%;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.recipe-detail-description p {
+  padding: 1rem;
+  white-space: pre-line;
+}
+
+.recipe-detail-ingredients {
+    border: 3px solid rgb(165, 108, 52);
+    border-radius: 0.5rem;
+    overflow-y: auto;
+}
+
+.recipe-detail-ingredients h2 {
+    background-color: rgb(165, 108, 52);
+    color: rgb(255, 255, 255);
+    width: 100%;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.recipe-detail-ingredients ul {
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.recipe-detail-ingredients li {
+  word-break: break-word;      /* corta palabras largas */
+  overflow-wrap: break-word;   /* asegura que baje a la siguiente línea */
+  white-space: normal;         /* permite saltos de línea */
+}
+
+/* Scrollbar completo */
+
+.recipe-detail-description::-webkit-scrollbar, 
+.recipe-detail-ingredients::-webkit-scrollbar {
+  width: 10px; /* ancho de la barra */
+}
+
+/* Fondo del scroll (track) */
+.recipe-detail-description::-webkit-scrollbar-track, 
+.recipe-detail-ingredients::-webkit-scrollbar-track {
+  background: rgb(165, 108, 52); /* color de fondo */
+}
+
+/* Thumb (parte que se arrastra) */
+.recipe-detail-description::-webkit-scrollbar-thumb, 
+.recipe-detail-ingredients::-webkit-scrollbar-thumb {
+  background-color: rgb(255, 255, 255); /* color del thumb */
+  border-radius: 0.5rem;
+  border: 2px solid rgb(165, 108, 52); /* borde alrededor del thumb */
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+    .recipe-detail-container{
+        width: 100%;
+        margin: 0;
+    }
+
+    .recipe-detail{
+        margin: 0;
+        border-radius: 0;
+        background-color: rgba(255, 255, 255, 0.849);
+    }
+
+    .recipe-detail-section {
+        flex-direction: column;
+        gap: 1.5rem;
+        border-radius: 0;
+    }
+
+    .recipe-detail-img-container {
+        width: 100%;
+        height: auto;
+        display: flex;
+        justify-content: center;
+    }
+
+    .recipe-detail-img{
+        height: auto;
+    }
+
+    .recipe-detail-description {
+        width: 100%;
+        background-color: rgb(255, 255, 255);
+    }
+
+    .recipe-detail-ingredients{
+        width: 100%;
+        background-color: rgb(255, 255, 255);
+    }
+
+    .recipe-detail-title{
+        background-color: rgb(255, 255, 255);
+        padding: 1rem 0;
+        border-radius: 0.5rem;
+        font-size: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 100%;
+        word-break: break-word;    
+        overflow-wrap: break-word
+    }
 }

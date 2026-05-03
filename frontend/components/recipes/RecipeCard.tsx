@@ -23,7 +23,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
                 className={`description-overlay absolute inset-x-0 bottom-0 transform transition-transform duration-300 animate-slide ${showOverlay ? "translate-y-0" : "translate-y-full"
                     } group-hover:translate-y-0`}
             >
-                <p className="p-4 text-center">{recipe.description}</p>
+                <p className="p-4 text-center line-clamp-6 mb-2 recipe-detail-description">{recipe.description}</p>
                 <Link
                     href={`/recipes/${recipe.id}`}
                     className="inline-block bg-white text-black font-semibold px-4 py-2 rounded mb-4 hover:bg-gray-200 transition-colors"
