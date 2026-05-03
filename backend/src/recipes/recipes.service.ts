@@ -36,7 +36,11 @@ export class RecipesService {
         if (!recipe) {
             throw new HttpException('Recipe not found', HttpStatus.NOT_FOUND);
         }
-        return recipe;
+        const user = await this.userService.getUser(recipe.userId);
+        if (!user) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+        return { ...recipe, author: `${user.firstName} ${user.lastName}` };
     }
 
     async getPublicRecipe(publicId: string) {
@@ -46,7 +50,11 @@ export class RecipesService {
         if (!recipe) {
             throw new HttpException('Recipe not found', HttpStatus.NOT_FOUND);
         }
-        return recipe;
+        const user = await this.userService.getUser(recipe.userId);
+        if (!user) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+        return { ...recipe, author: `${user.firstName} ${user.lastName}` };
     }
 
     getRecipesByUser(userId: number) {
