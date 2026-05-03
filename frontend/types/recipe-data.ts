@@ -4,4 +4,6 @@ export type RecipeData = {
   description: string;
   imageUrl: string;
   ingredients: string[];
+  author: string;
+  publicId: string;
 };

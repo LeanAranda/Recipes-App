@@ -9,6 +9,13 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const pathname = window.location.pathname;
+
+    if (pathname.endsWith("/public")) {
+      setAuthorized(true);
+      return;
+    }
+
     if (!token) {
       router.push("/auth/login");
     } else {

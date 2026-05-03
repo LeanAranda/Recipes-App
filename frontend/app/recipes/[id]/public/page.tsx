@@ -6,17 +6,16 @@ import { fetchApi } from "@/lib/fetchApi";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import type { RecipeData } from "@/types/recipe-data";
-import toast from "react-hot-toast";
 
-export default function RecipePage({ params }: { params: Promise<{ id: string }> }) {
+export default function PublicRecipePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
     const [loading, setLoading] = useState(true);
     const [recipeData, setRecipeData] = useState<RecipeData | null>(null);
 
     useEffect(() => {
-        async function loadRecipe() {
+        async function loadPublicRecipe() {
             try {
-                const data = await fetchApi(`/recipes/${id}`);
+                const data = await fetchApi(`/recipes/${id}/public`);
                 setRecipeData(data);
             } catch (error) {
                 console.error("Error fetching recipe:", error);
@@ -24,7 +23,7 @@ export default function RecipePage({ params }: { params: Promise<{ id: string }>
                 setLoading(false);
             }
         }
-        loadRecipe();
+        loadPublicRecipe();
     }, [id]);
 
     if (loading) return <div className="p-6 text-center">Cargando receta...</div>;
@@ -32,7 +31,7 @@ export default function RecipePage({ params }: { params: Promise<{ id: string }>
 
     return (
         <>
-            <Navbar />
+            <Navbar isPublic={true} />
             <div className="flex flex-col justify-center recipe-detail-container">
                 <div className="flex flex-col justify-center bg-white shadow-md rounded-lg p-6 recipe-detail">
                     <h1 className="text-4xl font-bold mb-4 text-gray-900 recipe-detail-title">
@@ -63,23 +62,6 @@ export default function RecipePage({ params }: { params: Promise<{ id: string }>
                         <p className="text-lg text-gray-700 ">
                             {recipeData.description}
                         </p>
-                    </div>
-                    <button
-                        onClick={() => {
-                            navigator.clipboard.writeText(
-                                `${window.location.origin}/recipes/${recipeData.publicId}/public`
-                            );
-                            toast.success("Link copiado al portapapeles");
-                        }}
-                        className="inline-block bg-white text-black font-semibold px-4 py-2 rounded mb-4 hover:bg-gray-200 transition-colors"
-                    >
-                        Compartir la receta mediante un link público
-                    </button>
-                    <div className="recipe-detail-ratings">
-                        {/*
-                        [TODO SUBMIT RATINGS COMPONENT]
-                        [TODO RATINGS COMPONENT]
-                        */}
                     </div>
                 </div>
             </div>
