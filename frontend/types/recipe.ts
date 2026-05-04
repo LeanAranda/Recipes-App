@@ -3,4 +3,5 @@ export type Recipe = {
   title: string;
   description: string;
   imageUrl: string;
+  deleted: boolean;
 };

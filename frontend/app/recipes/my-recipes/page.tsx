@@ -1,29 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { fetchApi } from "@/lib/fetchApi";
 import Navbar from "@/components/Navbar";
 import Title from "@/components/Title";
 import Footer from "@/components/Footer";
 import RecipeCard from "@/components/recipes/RecipeCard";
 import type { Recipe } from "@/types/recipe";
+import { useEffect, useState } from "react";
+import { fetchApi } from "@/lib/fetchApi";
 
-export default function RecipesPage() {
+export default function MyRecipesPage() {
     const [loading, setLoading] = useState(true);
     const [recipes, setRecipes] = useState<Recipe[]>([]);
 
-    useEffect(() => {
-        async function loadRecipes() {
-            try {
-                const data = await fetchApi("/recipes");
-                setRecipes(data);
-            } catch (error) {
-                console.error("Error fetching recipes:", error);
-            } finally {
-                setLoading(false);
-            }
+    async function loadRecipes() {
+        try {
+            const data = await fetchApi("/recipes/my-recipes");
+            setRecipes(data);
+        } catch (error) {
+            console.error("Error fetching recipes:", error);
+        } finally {
+            setLoading(false);
         }
+    }
 
+    useEffect(() => {
         loadRecipes();
     }, []);
 
@@ -48,10 +48,10 @@ export default function RecipesPage() {
         <>
             <Navbar />
             <div className="min-h-screen bg-fixed bg-cover bg-center recipes-container">
-                <Title>Todas las recetas</Title>
+                <Title>Mis recetas</Title>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     {recipes.map((recipe) => (
-                        <RecipeCard key={recipe.id} recipe={recipe} />
+                        <RecipeCard key={recipe.id} recipe={recipe} editable={true} loadRecipes={loadRecipes} />
                     ))}
                 </div>
             </div>
