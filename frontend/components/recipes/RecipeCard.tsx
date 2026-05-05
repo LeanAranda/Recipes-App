@@ -72,7 +72,7 @@ export default function RecipeCard({ recipe, editable, loadRecipes }: { recipe: 
                 {editable && (
                     <div className="flex flex-row gap-4">
                         <Link
-                            href={`/recipes/${recipe.id}/edit`}
+                            href={`/recipes/edit/${recipe.id}`}
                             className="inline-block bg-white text-black font-semibold px-4 py-2 rounded mb-4 hover:bg-gray-200 transition-colors"
                         >
                             Editar

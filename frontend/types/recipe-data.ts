@@ -6,4 +6,5 @@ export type RecipeData = {
   ingredients: string[];
   author: string;
   publicId: string;
+  deleted: boolean;
 };
