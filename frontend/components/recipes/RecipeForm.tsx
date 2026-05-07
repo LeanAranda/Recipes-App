@@ -1,12 +1,19 @@
+"use client";
+
 import ImageUrlInput from "@/components/recipes/ImageUrlInput";
 import { fetchApi } from "@/lib/fetchApi";
 import { redirect } from "next/navigation";
 import toast from "react-hot-toast";
 import type { RecipeData } from "@/types/recipe-data";
-import { useState } from "react";
+import { use, useState } from "react";
+import { generateRecipeWithGoogleAI } from "@/lib/generateRecipeWithGoogleAI";
 
 export default function RecipeForm({ recipeData }: { recipeData?: RecipeData }) {
     const [loading, setLoading] = useState(false);
+    const [description, setDescription] = useState(recipeData?.description || "");
+    const [ingredients, setIngredients] = useState(
+        recipeData?.ingredients?.join("\n") || ""
+    );
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -92,6 +99,7 @@ export default function RecipeForm({ recipeData }: { recipeData?: RecipeData }) 
                                     required
                                     defaultValue={recipeData?.title || ""}
                                 />
+
                             </div>
                             <div className="mb-4 w-full">
                                 <label htmlFor="description">Descripción</label>
@@ -99,9 +107,10 @@ export default function RecipeForm({ recipeData }: { recipeData?: RecipeData }) 
                                     id="description"
                                     name="description"
                                     rows={5}
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
                                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                                     required
-                                    defaultValue={recipeData?.description || ""}
                                 ></textarea>
                             </div>
                             <div className="w-full">
@@ -110,23 +119,58 @@ export default function RecipeForm({ recipeData }: { recipeData?: RecipeData }) 
                                     id="ingredients"
                                     name="ingredients"
                                     rows={5}
+                                    value={ingredients}
+                                    onChange={(e) => setIngredients(e.target.value)}
                                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                                     required
-                                    defaultValue={recipeData?.ingredients?.join("\n") || ""}
                                 ></textarea>
                             </div>
                         </div>
 
                         <div className="w-full flex-col form-section">
                             <ImageUrlInput oldUrl={recipeData?.imageUrl} />
-                            {loading && <p className="text-sm text-gray-500 mt-2">Subiendo imagen...</p>}
+                            {loading && <p className="text-sm text-gray-500 mt-2">Espera por favor...</p>}
                         </div>
 
                     </div>
 
-                    <button type="submit" className="bg-blue-500 text-white font-semibold px-4 py-2 rounded hover:bg-blue-600 transition-colors submit-button">
-                        Guardar receta
+                    <button
+                        type="button"
+                        className="bg-white text-black border border-blue-600 hover:bg-blue-300 flex items-center gap-2 font-semibold px-4 py-2 rounded transition-colors"
+                        onClick={async () => {
+                            setLoading(true);
+                            try {
+                                const aiData = await generateRecipeWithGoogleAI(
+                                    (document.getElementById("title") as HTMLInputElement).value
+                                );
+
+                                setDescription(aiData.descripcion || "");
+                                setIngredients((aiData.ingredientes ?? []).join("\n"));
+                            } catch (err) {
+                                toast.error("Error al generar con IA");
+                                console.error(err);
+                            } finally {
+                                setLoading(false);
+                            }
+                        }}
+                    >
+                        Autocompletar con IA
+                        <img src="/icons/gemini-color.svg" alt="Eliminar" className="w-6 h-6" />
                     </button>
+
+                    <div className="flex gap-4">
+                        <button type="submit" className="text-white font-semibold px-4 py-2 rounded transition-colors submit-button">
+                            Guardar receta
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => redirect("/recipes/my-recipes")}
+                            className="text-white font-semibold px-4 py-2 rounded transition-colors submit-button"
+                        >
+                            Cancelar
+                        </button>
+                    </div>
+
                 </form>
             </div>
         </div>
