@@ -3,17 +3,35 @@ import { fetchApi } from "@/lib/fetchApi";
 import { redirect } from "next/navigation";
 import toast from "react-hot-toast";
 import type { RecipeData } from "@/types/recipe-data";
+import { useState } from "react";
 
-export default function RecipeForm( {recipeData} : {recipeData?: RecipeData} ) {
+export default function RecipeForm({ recipeData }: { recipeData?: RecipeData }) {
+    const [loading, setLoading] = useState(false);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
 
-        const fallbackImage =
-            "https://res.cloudinary.com/dnuamvosm/image/upload/v1778003231/image-not-found_sicbdf.png";
+        const file = (formData.get("file") as File) || null;
+        let imageUrl = formData.get("imageUrl") as string;
 
-        const rawImageUrl = (formData.get("imageUrl") as string) || "";
+        if (file && file.size > 0) {
+            setLoading(true);
+            const uploadData = new FormData();
+            uploadData.append("file", file);
+            uploadData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
+
+            try {
+                const res = await fetch(
+                    `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+                    { method: "POST", body: uploadData }
+                );
+                const json = await res.json();
+                imageUrl = json.secure_url;
+            } finally {
+                setLoading(false);
+            }
+        }
 
         const data = {
             title: formData.get("title") as string,
@@ -22,7 +40,9 @@ export default function RecipeForm( {recipeData} : {recipeData?: RecipeData} ) {
                 .split("\n")
                 .map((i) => i.trim())
                 .filter((i) => i),
-            imageUrl: rawImageUrl.trim() === "" ? fallbackImage : rawImageUrl,
+            imageUrl:
+                imageUrl ||
+                `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1778003231/image-not-found_sicbdf.png`,
         };
 
         if (recipeData) {
@@ -99,10 +119,10 @@ export default function RecipeForm( {recipeData} : {recipeData?: RecipeData} ) {
 
                         <div className="w-full flex-col form-section">
                             <ImageUrlInput oldUrl={recipeData?.imageUrl} />
+                            {loading && <p className="text-sm text-gray-500 mt-2">Subiendo imagen...</p>}
                         </div>
 
                     </div>
-
 
                     <button type="submit" className="bg-blue-500 text-white font-semibold px-4 py-2 rounded hover:bg-blue-600 transition-colors submit-button">
                         Guardar receta
