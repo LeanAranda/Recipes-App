@@ -25,28 +25,30 @@ export default function RecipePage({ params }: { params: Promise<{ id: string }>
             const ratings = await fetchApi(`/rating/recipe/${id}`);
             setRatings(ratings);
         } catch (error) {
-            console.error("Error fetching ratings:", error);
+            toast.error("Error al cargar las calificaciones");
+        }
+    }
+
+    async function loadRecipe() {
+        try {
+            const data = await fetchApi(`/recipes/${id}`);
+            setRecipeData(data);
+        } catch (error) {
+            toast.error("Error al cargar la receta");
+        } finally {
+            setLoading(false);
         }
     }
 
     useEffect(() => {
-        async function loadRecipe() {
-            try {
-                const data = await fetchApi(`/recipes/${id}`);
-                setRecipeData(data);
-            } catch (error) {
-                console.error("Error fetching recipe:", error);
-            } finally {
-                setLoading(false);
-            }
-        }
-
         loadRecipe();
         loadRatings();
     }, [id]);
 
-    if (loading) return <div className="p-6 text-center">Cargando receta...</div>;
-    if (!recipeData) return <div className="p-6 text-center">Receta no encontrada.</div>;
+    if (loading) return <div className="p-6 text-center bg-gray-100">Cargando receta...</div>;
+    if (!recipeData) return <div className="p-6 text-center bg-gray-100">Receta no encontrada.</div>;
+    if (recipeData.deleted && recipeData.userId != userId) return <div className="p-6 text-center bg-gray-100">Esta receta ha sido eliminada.</div>;
+
 
     return (
         <>

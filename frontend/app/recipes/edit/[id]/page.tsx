@@ -8,11 +8,14 @@ import { fetchApi } from "@/lib/fetchApi";
 import { useEffect, useState } from "react";
 import { useParams } from "next/dist/client/components/navigation";
 import { RecipeData } from "@/types/recipe-data";
+import toast from "react-hot-toast";
+import { getUserIdFromToken } from "@/lib/getUserIdFromToken";
 
 export default function EditRecipePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
     const [recipeData, setRecipeData] = useState<RecipeData | null>(null);
+    const userId = getUserIdFromToken();
 
     useEffect(() => {
         async function loadRecipe() {
@@ -20,7 +23,7 @@ export default function EditRecipePage({ params }: { params: Promise<{ id: strin
                 const data = await fetchApi(`/recipes/${id}`);
                 setRecipeData(data);
             } catch (error) {
-                console.error("Error fetching recipe:", error);
+                toast.error("Error al cargar la receta");
             } finally {
                 setLoading(false);
             }
@@ -29,8 +32,9 @@ export default function EditRecipePage({ params }: { params: Promise<{ id: strin
         loadRecipe();
     }, [id]);
 
-    if (loading) return <div className="p-6 text-center">Cargando receta...</div>;
-    if (!recipeData) return <div className="p-6 text-center">Receta no encontrada.</div>;
+    if (loading) return <div className="p-6 text-center bg-gray-100">Cargando receta...</div>;
+    if (!recipeData) return <div className="p-6 text-center bg-gray-100">Receta no encontrada.</div>;
+    if (recipeData.userId !== userId) return <div className="p-6 text-center bg-gray-100">Solo el propietario puede editar esta receta.</div>;
 
     return (
         <>

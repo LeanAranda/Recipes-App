@@ -7,4 +7,5 @@ export type RecipeData = {
   author: string;
   publicId: string;
   deleted: boolean;
+  userId: number;
 };
