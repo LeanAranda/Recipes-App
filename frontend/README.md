@@ -10,12 +10,13 @@ Proporciona una interfaz limpia e intuitiva para manejar usuarios, recetas y rat
 - [Cloudinary](https://cloudinary.com/)             - Repositorio y gestión de imágenes
 
 ## Funcionalidades principales
-- Registro y login de usuarios
-- CRUD de recetas
-- Ratings de recetas
-- Subida de imágenes a Cloudinary
-- Autocompletar con IA (Gemini)
-- Diseño responsive
+- Registro y login de usuarios  
+- CRUD de recetas (crear, editar, eliminar, listar)  
+- Ratings de recetas  
+- Subida de imágenes a Cloudinary  
+- Autocompletar con IA (Gemini)  
+- Diseño responsive 
+- Compartir receta mediante un link público
 
 ## Rutas principales
 
@@ -66,5 +67,4 @@ El frontend estará disponible en http://localhost:3000/
 El proyecto está preparado para deploy en [Vercel](https://vercel.com).  
 Solo se necesita clonar el repositorio y configurar las variables de entorno en el dashboard.
 
-## Acceso al deploy
-La aplicación ya está deployada y disponible públicamente en Vercel: https://recipes-app-lean.vercel.app
+La aplicación ya está deployada y disponible públicamente en: https://recipes-app-lean.vercel.app

@@ -21,7 +21,8 @@ Aplicación **fullstack** para gestionar recetas de cocina, con autenticación d
 - Ratings de recetas  
 - Subida de imágenes a Cloudinary  
 - Autocompletar con IA (Gemini)  
-- Diseño responsive  
+- Diseño responsive 
+- Compartir receta mediante un link público
 
 ---
 
