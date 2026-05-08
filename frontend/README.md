@@ -67,8 +67,4 @@ El proyecto está preparado para deploy en [Vercel](https://vercel.com).
 Solo se necesita clonar el repositorio y configurar las variables de entorno en el dashboard.
 
 ## Acceso al deploy
-La aplicación ya está deployada y disponible públicamente en Vercel: https://recipes-app.vercel.app
-
-> **Nota:** 
-> si el backend en Render está en plan gratuito, puede entrar en modo "sleep" por inactividad.  
-> En ese caso, la primera petición puede tardar unos segundos mientras el servidor se reactiva.
+La aplicación ya está deployada y disponible públicamente en Vercel: https://recipes-app-lean.vercel.app
