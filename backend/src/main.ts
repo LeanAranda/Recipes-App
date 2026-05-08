@@ -20,7 +20,8 @@ async function bootstrap() {
 
   app.enableCors({
     origin: {
-      'https://recipes-app-flax-three.vercel.app/': true
+      'https://recipes-app-flax-three.vercel.app/': true,
+      'https://recipes-app-lean.vercel.app/': true
     },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
