@@ -1,27 +1,36 @@
 "use client";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function ImageUrlInput({ oldUrl }: { oldUrl?: string }) {
   const [imageUrl, setImageUrl] = useState(oldUrl || "");
 
-  // Imagen por defecto cuando la URL falla
   const fallbackImage =
     "/image-not-found.png";
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (file) {
-      const objectUrl = URL.createObjectURL(file);
-      setImageUrl(objectUrl);
+
+    if (!file) return;
+
+    const validTypes = ["image/jpeg", "image/png", "image/webp"];
+
+    if (!validTypes.includes(file.type)) {
+      toast.error("Formato de imagen no válido.");
+      e.target.value = ""; 
+      return;
     }
+
+    const objectUrl = URL.createObjectURL(file);
+    setImageUrl(objectUrl);
   }
 
   return (
-    <div className="mb-4 w-full flex flex-col gap-4">
+    <div className="mb-4 w-full flex flex-col form-section gap-3">
       <div>
         <label
           htmlFor="imageUrl"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm"
         >
           URL de la imagen
         </label>
@@ -43,15 +52,14 @@ export default function ImageUrlInput({ oldUrl }: { oldUrl?: string }) {
           alt="Vista previa"
           className="w-full max-h-64 object-cover"
           onError={(e) => {
-            // si falla la carga, reemplaza por la imagen fallback
             (e.currentTarget as HTMLImageElement).src = fallbackImage;
           }}
         />
       </div>
-      
-      
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
+
+
+      <div className="hover:cursor-pointer">
+        <label className="block text-sm">
           Cargar imagen desde tu dispositivo
         </label>
         <input
@@ -64,10 +72,11 @@ export default function ImageUrlInput({ oldUrl }: { oldUrl?: string }) {
                      file:rounded-md file:border-0
                      file:text-sm file:font-semibold
                      file:bg-gray-500 file:text-white
-                     hover:file:bg-gray-200 hover:file:text-gray-700"
+                     hover:file:bg-gray-200 hover:file:text-gray-700
+                     hover:cursor-pointer hover:file:cursor-pointer"
         />
       </div>
-      
+
     </div>
   );
 }

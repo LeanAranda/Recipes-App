@@ -24,7 +24,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
   }, [router]);
 
   if (!authorized) {
-    return null; // mientras redirige no muestra nada
+    return null; 
   }
 
   return <>{children}</>;
