@@ -56,4 +56,4 @@ Acá → https://recipes-app-lean.vercel.app
 Se puede iniciar sesión con las siguientes credenciales por defecto, o crear un usuario nuevo:
 
 - **Usuario:** `user@gmail.com`  
-- **Contraseña:** `pass1234` 
+- **Contraseña:** `recipesPass1234` 
