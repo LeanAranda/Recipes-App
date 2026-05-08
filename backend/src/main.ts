@@ -19,16 +19,12 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, documentFactory);
 
   app.enableCors({
-    //origin: 'https://frontend',
     origin: {
-      'https://mynotes--frontend--z6wxwfqcq9zw.code.run': true,
-      'http://localhost:3000': true,
+      'https://recipes-app-flax-three.vercel.app': true
     },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
-
-  //app.enableCors();
 
   await app.listen(process.env.PORT ?? 4000);
 }
