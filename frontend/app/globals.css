@@ -115,6 +115,14 @@ textarea {
     width: 100%;
 }
 
+.recipe-title {
+    text-align: center;
+    padding: 0 0.5rem;
+    max-height: 2rem;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
 .description-overlay {
     background-color: rgb(165, 108, 52);
     color: rgb(255, 255, 255);
@@ -374,7 +382,7 @@ button:hover {
 
 }
 
-@media (max-width: 400px) {
+@media (max-width: 500px) {
     .recipe-form-content{
         display: flex;
         flex-direction: column;
@@ -386,4 +394,22 @@ button:hover {
         gap: 1rem;
     }
 
+    .nav-logo {
+        width: 100%;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .nav-button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
 }

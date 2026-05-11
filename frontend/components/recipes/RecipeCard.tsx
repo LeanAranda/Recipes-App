@@ -51,7 +51,7 @@ export default function RecipeCard({ recipe, editable, loadRecipes }: { recipe: 
                 alt={recipe.title}
                 className="w-80 h-48 object-cover rounded"
             />
-            <h2 className="text-xl font-semibold mt-2 mb-4">{recipe.title}</h2>
+            <h2 className="text-xl font-semibold mt-2 mb-4 w-80 recipe-title">{recipe.title}</h2>
 
             <div
                 className={
